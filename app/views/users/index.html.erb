@@ -1,0 +1,35 @@
+<div class="container mt-5">
+  <h1>Usuarios</h1>
+  <div id="loading" class="mt-3" style="display: none;">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <div id="users-list" class="mt-3"></div>
+  <p></p>
+  <button id="load-users" class="btn btn-primary mt-3">Recargar</button>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("load-users").addEventListener("click", function() {
+      const loadingIndicator = document.getElementById("loading");
+      const usersList = document.getElementById("users-list");
+      loadingIndicator.style.display = "block";
+      usersList.innerHTML = "";
+
+      fetch("/users.json")
+        .then(response => response.json())
+        .then(data => {
+          loadingIndicator.style.display = "none";
+
+          data.forEach(user => {
+            const userDiv = document.createElement("div");
+            userDiv.classList.add("list-group-item");
+            userDiv.innerHTML = `ID: ${user.id}, Name: ${user.name}, Email: ${user.email}`;
+            usersList.appendChild(userDiv);
+          });
+        });
+    });
+  });
+</script>
